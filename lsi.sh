@@ -47,22 +47,23 @@ if [[ $# == 0 ]] || [[ $1 == "-h" ]] || [[ $1 == "help" ]] || [[ $1 == "--help" 
   echo "
               OBPG  .:.  lsi.sh $arg1 $arg2
   -----------------------------------------------------
-  status        = Status of Virtual drives (volumes)
-  drives        = Status of hard drives
-  ident \$slot   = Blink light on drive (need slot number)
-  good \$slot    = Simply makes the slot \Unconfigured(good)\ (need slot number)
+  status	= Status of Virtual drives (volumes)
+  drives	= Status of hard drives
+  ident \$slot	= Blink light on drive (need slot number)
+  good \$slot	= Simply makes the slot \Unconfigured(good)\ (need slot number)
   replace \$slot = Replace \Unconfigured(bad)\ drive (need slot number)
-  progress      = Status of drive rebuild
-  errors        = Show drive errors which are non-zero
-  bat           = Battery health and capacity
-  batrelearn    = Force BBU re-learn cycle
-  logs          = Print card logs
-  checkNemail   = Check volume(s) and send email on raid errors
-  allinfo       = Print out all settings and information about the card
-  settime       = Set the raid card's time to the current system time
-  setdefaults   = Set preferred default settings for new raid setup
-  alarm         = Enable (1) or disable (0) the alarm sound
-  jbod          = Enable (1) or diable (0) jbod
+  progress	= Status of drive rebuild
+  errors	= Show drive errors which are non-zero
+  bat		= Battery health and capacity
+  batrelearn	= Force BBU re-learn cycle
+  logs		= Print card logs
+  checkNemail	= Check volume(s) and send email on raid errors
+  allinfo	= Print out all settings and information about the card
+  settime	= Set the raid card's time to the current system time
+  setdefaults	= Set preferred default settings for new raid setup
+  alarm		= Enable (1) or disable (0) the alarm sound
+  jbod		= Enable (1) or diable (0) jbod
+  raid0		= Set single harddisk to raid0
 "
   exit
 fi
@@ -300,3 +301,11 @@ if [ $1 = "jbod" ];then
         echo "Either 0 (disable) or 1 (enable) is needed as a parameter"
     fi
 fi
+
+if [ $1 = "raid0" ];then
+# TODO: need logic beep ba boop
+    ${MegaCli} -CfgLdAdd -r0 "[$ENCLOSURE:$2]" -a0
+fi
+
+
+
