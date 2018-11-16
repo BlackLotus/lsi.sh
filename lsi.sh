@@ -7,6 +7,8 @@
 #
 # description: MegaCLI script to configure and monitor LSI raid cards.
 
+# TODO: cleaning the code
+
 # Full path to the MegaRaid CLI binary
 if [[ -e "$(which MegaCli 2>/dev/null)" ]]; then
     MegaCli=$(which MegaCli)
@@ -60,6 +62,7 @@ if [[ $# == 0 ]] || [[ $1 == "-h" ]] || [[ $1 == "help" ]] || [[ $1 == "--help" 
   settime       = Set the raid card's time to the current system time
   setdefaults   = Set preferred default settings for new raid setup
   alarm         = Enable (1) or disable (0) the alarm sound
+  jbod          = Enable (1) or diable (0) jbod
 "
   exit
 fi
@@ -287,3 +290,13 @@ if [ $1 = "alarm" ];then
     fi
 fi
 
+# Enables JBOD support (if it's supported by the controller which isn't a given)
+if [ $1 = "jbod" ];then
+    if [ "$2" = "0" ];then
+        ${MegaCli} -AdpSetProp EnableJBOD -a0
+    elif [ "$2" = "1" ];then
+        ${MegaCli} -AdpSetProp EnableJBOD -a0
+    else
+        echo "Either 0 (disable) or 1 (enable) is needed as a parameter"
+    fi
+fi
