@@ -95,7 +95,7 @@ fi
 
 # Shows the state of all drives and if they are online, unconfigured or missing.
 if [ "$1" = "drives" ] ; then
-      ${MegaCli} -PDlist -aALL -NoLog | egrep 'Slot|state' | ${AWK} '/Slot/{if (x)print x;x="";}{x=(!x)?$0:x" -"$0;}END{print x;}' | sed 's/Firmware state://g'
+      ${MegaCli} -PDlist -aALL -NoLog | grep -E 'Slot|state' | ${AWK} '/Slot/{if (x)print x;x="";}{x=(!x)?$0:x" -"$0;}END{print x;}' | sed 's/Firmware state://g'
    exit
 fi
 
@@ -130,7 +130,7 @@ fi
 # read/write retries or corrupt data. 
 if [ "$1" = "errors" ]
    then
-      echo "Slot Number: 0"; ${MegaCli} -PDlist -aALL -NoLog | egrep -i 'error|fail|slot' | egrep -v ' 0'
+      echo "Slot Number: 0"; ${MegaCli} -PDlist -aALL -NoLog | grep -E -i 'error|fail|slot' | grep -E -v ' 0'
    exit
 fi
 
@@ -195,7 +195,7 @@ fi
 # how much time it has taken so far. You can then guess-ti-mate the
 # completion time.
 if [ "$1" = "progress" ] ; then
-      DRIVE=$(${MegaCli} -PDlist -aALL -NoLog | egrep 'Slot|state' | ${AWK} '/Slot/{if (x)print x;x="";}{x=(!x)?$0:x" -"$0;}END{print x;}' | sed 's/Firmware state://g' | egrep build | ${AWK} '{print $3}')
+      DRIVE=$(${MegaCli} -PDlist -aALL -NoLog | grep -E 'Slot|state' | ${AWK} '/Slot/{if (x)print x;x="";}{x=(!x)?$0:x" -"$0;}END{print x;}' | sed 's/Firmware state://g' | grep -E build | ${AWK} '{print $3}')
       if [[ -z $DRIVE ]] ; then
         echo "No Drives in rebuild process"
       fi
@@ -221,11 +221,11 @@ if [ "$1" = "checkNemail" ]
       EMAIL="raidadmin@localhost"
 
       # Check if raid is in good condition
-      STATUS=$(${MegaCli} -LDInfo -Lall -aALL -NoLog | egrep -i 'fail|degrad|error')
+      STATUS=$(${MegaCli} -LDInfo -Lall -aALL -NoLog | grep -E -i 'fail|degrad|error')
 
       # On bad raid status send email with basic drive information
       if [ "$STATUS" ]; then
-         ${MegaCli} -PDlist -aALL -NoLog | egrep 'Slot|state' | ${AWK} '/Slot/{if (x)print x;x="";}{x=(!x)?$0:x" -"$0;}END{print x;}' | sed 's/Firmware state://g' | mail -s $(hostname)' - RAID Notification' $EMAIL
+         ${MegaCli} -PDlist -aALL -NoLog | grep -E 'Slot|state' | ${AWK} '/Slot/{if (x)print x;x="";}{x=(!x)?$0:x" -"$0;}END{print x;}' | sed 's/Firmware state://g' | mail -s $(hostname)' - RAID Notification' $EMAIL
       fi
 fi
 
