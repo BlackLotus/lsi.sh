@@ -102,10 +102,10 @@ fi
 # Use to blink the light on the slot in question. Hit enter again to turn the blinking light off.
 if [ "$1" = "ident" ]
    then
-      ${MegaCli}  -PdLocate -start -physdrv[$ENCLOSURE:$2] -a0 -NoLog
+      ${MegaCli}  -PdLocate -start -physdrv["${ENCLOSURE}":$2] -a0 -NoLog
       logger "$(hostname) - identifying enclosure $ENCLOSURE, drive $2 "
       read -p "Press [Enter] key to turn off light..."
-      ${MegaCli}  -PdLocate -stop -physdrv[$ENCLOSURE:$2] -a0 -NoLog
+      ${MegaCli}  -PdLocate -stop -physdrv["${ENCLOSURE}":$2] -a0 -NoLog
    exit
 fi
 
@@ -117,7 +117,7 @@ fi
 if [ "$1" = "good" ]
    then
       # set Unconfigured(bad) to Unconfigured(good)
-      ${MegaCli} -PDMakeGood -PhysDrv[$ENCLOSURE:$2] -a0 -NoLog
+      ${MegaCli} -PDMakeGood -PhysDrv["${ENCLOSURE}":$2] -a0 -NoLog
       # clear 'Foreign' flag or invalid raid header on replacement drive
       ${MegaCli} -CfgForeign -Clear -aALL -NoLog
    exit
@@ -173,13 +173,13 @@ if [ "$1" = "replace" ]
    then
       logger "$(hostname) - REPLACE enclosure $ENCLOSURE, drive $2 "
       # set Unconfigured(bad) to Unconfigured(good)
-      ${MegaCli} -PDMakeGood -PhysDrv[$ENCLOSURE:$2] -a0 -NoLog
+      ${MegaCli} -PDMakeGood -PhysDrv["${ENCLOSURE}":$2] -a0 -NoLog
       # clear 'Foreign' flag or invalid raid header on replacement drive
       ${MegaCli} -CfgForeign -Clear -aALL -NoLog
       # set drive as hot spare
-      ${MegaCli} -PDHSP -Set -PhysDrv [$ENCLOSURE:$2] -a0 -NoLog
+      ${MegaCli} -PDHSP -Set -PhysDrv ["${ENCLOSURE}":$2] -a0 -NoLog
       # show rebuild progress on replacement drive just to make sure it starts
-      ${MegaCli} -PDRbld -ShowProg -PhysDrv [$ENCLOSURE:$2] -a0 -NoLog
+      ${MegaCli} -PDRbld -ShowProg -PhysDrv ["${ENCLOSURE}":$2] -a0 -NoLog
    exit
 fi
 
@@ -199,9 +199,9 @@ if [ "$1" = "progress" ] ; then
       if [[ -z $DRIVE ]] ; then
         echo "No Drives in rebuild process"
       fi
-      #${MegaCli} -PDRbld -ShowProg -PhysDrv [${ENCLOSURE}:${DRIVE}] -a0 -NoLog
-      OUTPUT=$(${MegaCli} -PDRbld -ShowProg -PhysDrv [${ENCLOSURE}:${DRIVE}] -a0 -NoLog)
-      OUTPUT=$(${MegaCli} -PDRbld -ShowProg -PhysDrv [${ENCLOSURE}:${DRIVE}] -a0 -NoLog)
+      #${MegaCli} -PDRbld -ShowProg -PhysDrv ["${ENCLOSURE}":${DRIVE}] -a0 -NoLog
+      OUTPUT=$(${MegaCli} -PDRbld -ShowProg -PhysDrv ["${ENCLOSURE}":${DRIVE}] -a0 -NoLog)
+      OUTPUT=$(${MegaCli} -PDRbld -ShowProg -PhysDrv ["${ENCLOSURE}":${DRIVE}] -a0 -NoLog)
       PERC=$(echo ${OUTPUT}|${AWK} '{print $12}'|sed 's/%//')
       MIN=$(echo ${OUTPUT}|${AWK} '{print $14}')
       ETA=$((${MIN}*(100-${PERC})/${PERC}))
@@ -317,7 +317,7 @@ fi
 
 if [ "$1" = "raid0" ];then
 # TODO: need logic beep ba boop
-    ${MegaCli} -CfgLdAdd -r0 "[$ENCLOSURE:$2]" -a0
+    ${MegaCli} -CfgLdAdd -r0 "[${ENCLOSURE}:$2]" -a0
 fi
 
 if [ "$1" = "remove" ];then
