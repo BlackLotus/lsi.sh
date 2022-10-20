@@ -24,6 +24,7 @@ elif [[ -e "$(which awk 2>/dev/null)" ]] ; then
     AWK=$(which awk)
 fi
 
+
 if [ ! -x "${MegaCli}" ];then
     echo MegaCli is not installed or has the wrong permissions
     exit 1
@@ -317,7 +318,17 @@ fi
 
 if [ "$1" = "raid0" ];then
 # TODO: need logic beep ba boop
-    ${MegaCli} -CfgLdAdd -r0 "[${ENCLOSURE}:$2]" -a0
+   if [ $# -gt 2 ];then
+      echo Join
+      echo ${@:2}
+      r0=$(printf ",32:%s" "${@:3}")
+      r0="[32:${2}${r3}]"
+   elif [ $# -eq 2 ];then
+      r0="[${ENCLOSURE}:$2]"
+   else
+      echo "Raid0 needs at least one disk"
+   fi
+   ${MegaCli} -CfgLdAdd -r0 ${r0} -a0
 fi
 
 if [ "$1" = "remove" ];then
