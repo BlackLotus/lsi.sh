@@ -28,11 +28,11 @@ fi
 # is and set this variable.
 #ENCLOSURE="8"
 if [[ -z $ENCLOSURE ]] ; then
-  if [[ $(${MegaCli} -PDlist -a0 | ${AWK} '/Enclosure Device ID/ {print $NF}' | sort | uniq) > 0 ]] ; then
+  if [[ $(${MegaCli} -PDlist -a0 | ${AWK} '/Enclosure Device ID/ {print $NF}' | sort | uniq) -gt 0 ]] ; then
     ENCLOSURE=$(${MegaCli} -PDlist -a0 | ${AWK} '/Enclosure Device ID/ {print $NF}' | sort | uniq)
   fi
 fi
-if [[ $ENCLOSURE > 0 ]] ; then
+if [[ $ENCLOSURE -gt 0 ]] ; then
   echo "Found ENCLOSURE Device ID: ${ENCLOSURE}" &>/dev/stderr
 else
   echo "Could not determine ENCLOSURE Device ID for Adapter #0:" &>/dev/stderr
