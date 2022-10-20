@@ -13,24 +13,29 @@ Open the lsi.sh file and edit your settings (path and enclosure) for more info v
 
 ```
 [root@cluster ~]# ./lsi 
+Found ENCLOSURE Device ID: 32
 
-            OBPG  .:.  lsi.sh  
------------------------------------------------------
-status        = Status of Virtual drives (volumes)
-drives        = Status of hard drives
-ident $slot   = Blink light on drive (need slot number)
-good $slot    = Simply makes the slot "Unconfigured(good)" (need slot number)
-replace $slot = Replace "Unconfigured(bad)" drive (need slot number)
-progress      = Status of drive rebuild
-errors        = Show drive errors which are non-zero
-bat           = Battery health and capacity
-batrelearn    = Force BBU re-learn cycle
-logs          = Print card logs
-checkNemail   = Check volume(s) and send email on raid errors
-allinfo       = Print out all settings and information about the card
-settime       = Set the raid card's time to the current system time
-setdefaults   = Set preferred default settings for new raid setup
-alarm         = Enable (1) or disable (0) the alarm sound
+              OBPG  .:.  lsi.sh
+  -----------------------------------------------------
+  status        = Status of Virtual drives (volumes)
+  drives        = Status of hard drives
+  ident $slot   = Blink light on drive (need slot number)
+  good $slot    = Simply makes the slot \Unconfigured(good)\ (need slot number)
+  replace $slot = Replace \Unconfigured(bad)\ drive (need slot number)
+  remove $slot  = Remove hard drive from controller
+  progress      = Status of drive rebuild
+  errors        = Show drive errors which are non-zero
+  bat           = Battery health and capacity
+  batrelearn    = Force BBU re-learn cycle
+  logs          = Print card logs
+  checkNemail   = Check volume(s) and send email on raid errors
+  allinfo       = Print out all settings and information about the card
+  settime       = Set the raid card's time to the current system time
+  setdefaults   = Set preferred default settings for new raid setup
+  alarm         = Enable (1) or disable (0) the alarm sound
+  jbod          = Enable (1) or diable (0) jbod
+  raid0         = Set single harddisk to raid0
+  create-jbod   = Set single harddisk to jbod
 ```
 
 [1]: http://lmgtfy.com/?q=megacli
