@@ -34,7 +34,6 @@ if [ ! -x "${AWK}" ];then
     exit 1
 fi
 
-
 # The identifying number of the enclosure. Default for our systems is "8". Use
 # "${MegaCli}64 -PDlist -a0 | grep "Enclosure Device"" to see what your number
 # is and set this variable.
@@ -57,7 +56,7 @@ fi
 
 if [[ $# == 0 ]] || [[ $1 == "-h" ]] || [[ $1 == "help" ]] || [[ $1 == "--help" ]] ; then
   echo "
-              OBPG  .:.  lsi.sh $arg1 $arg2
+              OBPG  .:.  lsi.sh \$arg1 \$arg2
   -----------------------------------------------------
   status	= Status of Virtual drives (volumes)
   drives	= Status of hard drives
