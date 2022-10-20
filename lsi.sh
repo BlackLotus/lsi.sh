@@ -23,6 +23,18 @@ if [[ -e "$(which nawk 2>/dev/null)" ]] ; then
 elif [[ -e "$(which awk 2>/dev/null)" ]] ; then
     AWK=$(which awk)
 fi
+
+if [ ! -x "${MegaCli}" ];then
+    echo MegaCli is not installed or has the wrong permissions
+    exit 1
+fi
+
+if [ ! -x "${AWK}" ];then
+    echo awk is not installed or has the wrong permissions
+    exit 1
+fi
+
+
 # The identifying number of the enclosure. Default for our systems is "8". Use
 # "${MegaCli}64 -PDlist -a0 | grep "Enclosure Device"" to see what your number
 # is and set this variable.
