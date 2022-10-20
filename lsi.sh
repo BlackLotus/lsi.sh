@@ -52,6 +52,7 @@ if [[ $# == 0 ]] || [[ $1 == "-h" ]] || [[ $1 == "help" ]] || [[ $1 == "--help" 
   ident \$slot	= Blink light on drive (need slot number)
   good \$slot	= Simply makes the slot \Unconfigured(good)\ (need slot number)
   replace \$slot = Replace \Unconfigured(bad)\ drive (need slot number)
+  remove \$slot	= Remove hard drive from controller
   progress	= Status of drive rebuild
   errors	= Show drive errors which are non-zero
   bat		= Battery health and capacity
@@ -64,6 +65,7 @@ if [[ $# == 0 ]] || [[ $1 == "-h" ]] || [[ $1 == "help" ]] || [[ $1 == "--help" 
   alarm		= Enable (1) or disable (0) the alarm sound
   jbod		= Enable (1) or diable (0) jbod
   raid0		= Set single harddisk to raid0
+  create-jbod   = Set single harddisk to jbod
 "
   exit
 fi
@@ -307,5 +309,25 @@ if [ $1 = "raid0" ];then
     ${MegaCli} -CfgLdAdd -r0 "[$ENCLOSURE:$2]" -a0
 fi
 
+if [ $1 = "remove" ];then
+    # set offline
+    ${MegaCli} -PDOffline -PhysDrv "[${ENCLOSURE}:$2]" -a0
+    # mark drive as missing to be able to remove the drive
+    if [ $? -eq 0 ];then
+        ${MegaCli} -PDMarkMissing -PhysDrv "[${ENCLOSURE}:$2]" -a0
+    else
+        echo "Failed to set drive as offline"
+        exit 0
+    fi
+    # prepare controller for removal of drive/removes the driver from controller configuration
+    # sets drive to unconfigured (good)
+    if [ $? -eq 0 ];then
+        ${MegaCli} -PdPrpRmv -PhysDrv "[${ENCLOSURE}:$2]" -a0
+    else
+        echo "Failed to remove drive $2"
+    fi
+fi
 
-
+if [ $1 = "create-jbod" ];then
+   ${MegaCli} PDMakeJBOD -PhysDrv "[${ENCLOSURE}:$2]" -a0
+fi
