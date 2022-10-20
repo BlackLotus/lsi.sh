@@ -92,7 +92,7 @@ fi
 if [ $1 = "ident" ]
    then
       ${MegaCli}  -PdLocate -start -physdrv[$ENCLOSURE:$2] -a0 -NoLog
-      logger "`hostname` - identifying enclosure $ENCLOSURE, drive $2 "
+      logger "$(hostname) - identifying enclosure $ENCLOSURE, drive $2 "
       read -p "Press [Enter] key to turn off light..."
       ${MegaCli}  -PdLocate -stop -physdrv[$ENCLOSURE:$2] -a0 -NoLog
    exit
@@ -160,7 +160,7 @@ fi
 # destroy the raid drive, thankfully.
 if [ $1 = "replace" ]
    then
-      logger "`hostname` - REPLACE enclosure $ENCLOSURE, drive $2 "
+      logger "$(hostname) - REPLACE enclosure $ENCLOSURE, drive $2 "
       # set Unconfigured(bad) to Unconfigured(good)
       ${MegaCli} -PDMakeGood -PhysDrv[$ENCLOSURE:$2] -a0 -NoLog
       # clear 'Foreign' flag or invalid raid header on replacement drive
@@ -214,7 +214,7 @@ if [ $1 = "checkNemail" ]
 
       # On bad raid status send email with basic drive information
       if [ "$STATUS" ]; then
-         ${MegaCli} -PDlist -aALL -NoLog | egrep 'Slot|state' | ${AWK} '/Slot/{if (x)print x;x="";}{x=(!x)?$0:x" -"$0;}END{print x;}' | sed 's/Firmware state://g' | mail -s `hostname`' - RAID Notification' $EMAIL
+         ${MegaCli} -PDlist -aALL -NoLog | egrep 'Slot|state' | ${AWK} '/Slot/{if (x)print x;x="";}{x=(!x)?$0:x" -"$0;}END{print x;}' | sed 's/Firmware state://g' | mail -s $(hostname)' - RAID Notification' $EMAIL
       fi
 fi
 
@@ -234,7 +234,7 @@ fi
 if [ $1 = "settime" ]
    then
       ${MegaCli} -AdpGetTime -aALL -NoLog
-      ${MegaCli} -AdpSetTime `date +%Y%m%d` `date +%H:%M:%S` -aALL -NoLog
+      ${MegaCli} -AdpSetTime $(date +%Y%m%d) $(date +%H:%M:%S) -aALL -NoLog
       ${MegaCli} -AdpGetTime -aALL -NoLog
    exit
 fi
