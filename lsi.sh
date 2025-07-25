@@ -78,6 +78,10 @@ if [[ $# == 0 ]] || [[ "$1" == "-h" ]] || [[ "$1" == "help" ]] || [[ "$1" == "--
   jbod		= Enable (1) or diable (0) jbod
   raid0		= Set single harddisk to raid0
   create-jbod   = Set single harddisk to jbod
+  clear-cache   = Clear Harddisk cache to be able to reinsert disk
+  list-cache    = List all disks with preserved cache
+  list-foreign  = List all foreign configurations on the controller (on error: ... does not have appropriate attribute...)
+  clear-foreign = Clear all foreign configurations from the controller
 "
   exit
 fi
@@ -352,4 +356,20 @@ fi
 
 if [ "$1" = "create-jbod" ];then
    ${MegaCli} PDMakeJBOD -PhysDrv "[${ENCLOSURE}:$2]" -a0
+fi
+
+if [ "$1" = "clear-cache" ];then
+   ${MegaCli} -DiscardPreservedCache  -L${2} -a0
+fi
+
+if [ "$1" = "list-cache" ];then
+   ${MegaCli} -GetPreservedCacheList -a0
+fi
+
+if [ "$1" = "list-foreign" ];then
+   ${MegaCli} -CfgForeign -Scan -a0
+fi
+
+if [ "$1" = "clear-foreign" ];then
+   ${MegaCli} -CfgForeign -Clear -a0
 fi
